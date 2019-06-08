@@ -92,9 +92,10 @@ def wthread(rectified_width, corr, endrow, startrow):
 
             start_px = end_px
 
-            
+    # Crop the portion we worked on
+    slice = working_img.crop(box=(0, startrow, rectified_width, endrow))
     # Convert to a numpy array so STUPID !#$&ING PICKLE WILL WORK
-    out = numpy.array(working_img)
+    out = numpy.array(slice)
     # Make dict of important values, return that.
     return { "offs" : startrow, "offe" : endrow, "pixels" : out }
 
@@ -125,15 +126,9 @@ if __name__ == "__main__":
     # Callback function to modify the new image
     def modimage(data):
         if data:
-            # Let's make a float!
-            oset = "0." + str(data["offs"])
-            oset = float(oset)
-            # Get the temp image from numpy array (PICKLE IS STILL STUPID)
-            working_img = Image.fromarray(data["pixels"])
-            # Crop the portion we worked on
-            slice = working_img.crop(box=(0, data["offs"], rectified_width, data["offe"]))
-            # Write it to the new image in the right place
-            rectified_img.paste(slice, box=(0, data["offs"]))
+            # Write slice to the new image in the right place
+            rectified_img.paste(Image.fromarray(data["pixels"]), box=(0, data["offs"]))
+            
     # Number of workers to be spawned - Probably best to not overdo this...
     numworkers = cpu_count()
     # Estimate the number of rows per worker
