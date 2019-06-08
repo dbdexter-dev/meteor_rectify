@@ -7,10 +7,11 @@ curvature at any given height.
 
 ## Requirements
 
-This script depends on `pillow`. You can install it by issuing the following 
-command:
+This script depends on `pillow` and `numpy`. You can install them by issuing the following 
+commands:
 
 ```
 pip install pillow
+pip install numpy
 ```
 
